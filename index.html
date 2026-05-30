@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>THE 4×4 | IMPERIA THE1</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#0A0A0A;color:#D8D4CC;font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased}
+nav{position:sticky;top:0;z-index:99;background:rgba(10,10,10,.97);border-bottom:1px solid #1F1F1F;overflow-x:auto;scrollbar-width:none}
+nav::-webkit-scrollbar{display:none}
+.ni{display:flex;min-width:max-content;padding:0 12px}
+.t{padding:14px 16px;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#444;background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;white-space:nowrap;outline:none;transition:color .25s,border-color .25s}
+.t.on{color:#C9A84C;border-bottom-color:#C9A84C}
+.t:hover{color:#888}
+.pbar{height:2px;background:#161616}
+.pfill{height:100%;background:linear-gradient(90deg,#8A6A2A,#C9A84C);transition:width .4s ease}
+.pg{display:none;animation:fadeIn .3s ease}
+.pg.on{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.hero{padding:32px 20px 28px;text-align:center;border-bottom:1px solid #1F1F1F;position:relative;overflow:hidden}
+.hero-glow{position:absolute;inset:0;background:radial-gradient(ellipse 80% 70% at 50% 100%,rgba(201,168,76,.07),transparent);pointer-events:none}
+.dn{font-size:9px;font-weight:700;letter-spacing:6px;text-transform:uppercase;color:#C9A84C;margin-bottom:8px}
+.dt{font-size:clamp(26px,6vw,48px);font-weight:900;font-style:italic;line-height:1;letter-spacing:-1px;color:#E8E4DC}
+.badges{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;margin-top:12px}
+.badge{font-size:8px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:4px 10px;border:1px solid #242424;border-radius:2px;color:#666;background:#111}
+.badge.gold{color:#C9A84C;border-color:rgba(201,168,76,.35);background:rgba(201,168,76,.06)}
+.sec{padding:0 16px 40px;max-width:760px;margin:0 auto}
+.blk{display:flex;align-items:center;gap:10px;padding:24px 0 12px}
+.bline{flex:1;height:1px;background:linear-gradient(90deg,rgba(201,168,76,.3),transparent)}
+.bl{font-size:8px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#555;white-space:nowrap}
+.ec{border:1px solid #1A1A1A;border-left:2px solid #C9A84C;margin-bottom:3px;overflow:hidden;background:#0F0F0F;transition:background .2s}
+.ec:hover{background:#131313}
+.eh{padding:16px 16px 10px;display:flex;gap:14px;align-items:flex-start}
+.ei{font-size:28px;font-weight:900;font-style:italic;color:rgba(201,168,76,.12);flex-shrink:0;line-height:1;margin-top:2px;letter-spacing:-1px}
+.em{flex:1}
+.en{font-size:15px;font-weight:700;letter-spacing:.3px;margin-bottom:6px;color:#E0DCD4}
+.ps{display:flex;flex-wrap:wrap;gap:4px}
+.p{font-size:8px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:4px 10px;background:#161616;border:1px solid #222;color:#666;border-radius:2px}
+.p.hi{border-color:rgba(201,168,76,.3);color:#C9A84C;background:rgba(201,168,76,.05)}
+.ef{padding:0 16px 14px;display:grid;grid-template-columns:1fr 1fr;gap:6px}
+@media(max-width:400px){.ef{grid-template-columns:1fr}}
+.en2{padding:10px 12px;border:1px solid #161616;background:#0A0A0A}
+.el{font-size:7px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:4px;color:#C9A84C}
+.et{font-size:11px;color:#5A5A5A;line-height:1.6}
+.done-wrap{display:flex;align-items:center;gap:6px;margin-top:8px;cursor:pointer;user-select:none}
+.done-box{width:14px;height:14px;border:1px solid #2A2A2A;border-radius:2px;background:#111;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}
+.done-box.checked{background:#C9A84C;border-color:#C9A84C}
+.done-box svg{display:none}
+.done-box.checked svg{display:block}
+.done-lbl{font-size:8px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#333;transition:color .2s}
+.done-box.checked+.done-lbl{color:#C9A84C}
+.timer-btn{margin-top:8px;padding:5px 12px;background:transparent;border:1px solid #222;color:#444;font-size:8px;font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px;transition:all .2s}
+.timer-btn:hover{border-color:#C9A84C;color:#C9A84C}
+.timer-btn.running{border-color:#C9A84C;color:#C9A84C;background:rgba(201,168,76,.05)}
+.timer-display{font-size:11px;font-weight:700;color:#C9A84C;letter-spacing:2px;margin-top:4px;min-height:18px}
+
+/* LOCKED VIDEO */
+.lock-btn{display:inline-flex;align-items:center;gap:6px;margin-top:8px;padding:6px 12px;background:#0D0D0D;border:1px solid #1E1E1E;color:#333;font-size:8px;font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px;text-decoration:none;transition:all .2s}
+.lock-btn:hover{border-color:rgba(201,168,76,.3);color:#555}
+
+/* UNLOCKED VIDEO */
+.tg-btn{display:inline-flex;align-items:center;gap:6px;margin-top:8px;padding:6px 12px;background:rgba(201,168,76,.06);border:1px solid rgba(201,168,76,.25);color:#C9A84C;font-size:8px;font-weight:700;letter-spacing:2px;text-transform:uppercase;text-decoration:none;border-radius:2px;transition:all .2s}
+.tg-btn:hover{background:rgba(201,168,76,.12);border-color:#C9A84C}
+
+.fin{margin:20px 0 0;padding:20px;background:#0D0D0D;border:1px solid rgba(201,168,76,.15);position:relative;overflow:hidden}
+.fin::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,#C9A84C,transparent)}
+.ft{font-size:8px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#C9A84C;margin-bottom:12px}
+.fi{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:#555;padding:8px 0;border-bottom:1px solid #141414}
+.fi:last-child{border-bottom:none}
+.fn{color:#C9A84C;font-weight:700;font-size:11px;background:rgba(201,168,76,.07);padding:3px 8px;border:1px solid rgba(201,168,76,.2)}
+.ws{display:flex;flex-direction:column;gap:2px;padding:16px}
+.wr{display:grid;grid-template-columns:58px 1fr;gap:8px;align-items:center}
+.wl{font-size:8px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#2A2A2A;text-align:right}
+.wb{padding:14px 16px;border:1px solid #1A1A1A;border-left:2px solid #C9A84C;background:#0F0F0F;display:flex;align-items:center;justify-content:space-between;cursor:pointer;transition:background .2s}
+.wb:hover{background:#131313}
+.wb.dim{border-left-color:#1A1A1A;background:#0A0A0A;cursor:default}
+.wb.dim:hover{background:#0A0A0A}
+.wn{font-size:13px;font-weight:700;letter-spacing:.3px;color:#D8D4CC}
+.wn.gold{color:#C9A84C}
+.wf{font-size:8px;color:#383838;letter-spacing:1px;text-transform:uppercase;margin-top:3px}
+.dot3{display:flex;gap:4px}
+.d{width:5px;height:5px;border-radius:50%;background:#C9A84C;opacity:.2}
+.d.on{opacity:.8}
+.rc{display:grid;grid-template-columns:1fr 1fr;gap:2px}
+@media(max-width:500px){.rc{grid-template-columns:1fr}}
+.rcard{padding:18px;background:#0F0F0F;border:1px solid #1A1A1A;border-top:1px solid #C9A84C}
+.rl{font-size:8px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#C9A84C;margin-bottom:8px}
+.rv{font-size:12px;color:#555;line-height:1.65}
+.ibox{padding:18px;background:#0D0D0D;border:1px solid rgba(201,168,76,.12);margin-top:3px}
+.ibox-t{font-size:8px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#C9A84C;margin-bottom:8px}
+.ibox-b{font-size:12px;color:#555;line-height:1.75}
+.mchip{display:inline-flex;align-items:center;gap:5px;font-size:8px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#555;padding:3px 8px;border:1px solid #1E1E1E;margin-top:6px}
+.mdot{width:5px;height:5px;border-radius:50%;background:#C9A84C}
+.card-actions{padding:0 16px 14px;display:flex;flex-wrap:wrap;gap:8px;align-items:flex-start}
+
+/* PAYWALL BANNER */
+.paywall{margin:16px 0 0;padding:16px;background:#0D0D0D;border:1px solid rgba(201,168,76,.15);display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.paywall-txt{font-size:11px;color:#555;line-height:1.6}
+.paywall-txt strong{color:#C9A84C;display:block;font-size:9px;letter-spacing:2px;text-transform:uppercase;margin-bottom:4px}
+.paywall-btn{padding:10px 20px;background:#C9A84C;color:#080808;font-size:8px;font-weight:800;letter-spacing:3px;text-transform:uppercase;text-decoration:none;white-space:nowrap;transition:background .2s;flex-shrink:0}
+.paywall-btn:hover{background:#E8C86A}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="ni">
+    <button class="t on" onclick="show('ov',this,0)">Обзор</button>
+    <button class="t" onclick="show('ru',this,1)">Правила</button>
+    <button class="t" onclick="show('a1',this,2)">A1 · Ноги</button>
+    <button class="t" onclick="show('b1',this,3)">B1 · Спина</button>
+    <button class="t" onclick="show('a2',this,4)">A2 · Плечи</button>
+    <button class="t" onclick="show('b2',this,5)">B2 · Грудь</button>
+  </div>
+</nav>
+<div class="pbar"><div class="pfill" id="pbar" style="width:0%"></div></div>
+
+<!-- ОБЗОР -->
+<div id="ov" class="pg on">
+  <div style="padding:28px 20px 24px;text-align:center;border-bottom:1px solid #1F1F1F;position:relative;overflow:hidden">
+    <div class="hero-glow"></div>
+    <div class="dn">IMPERIA THE1</div>
+    <div style="font-size:clamp(22px,5vw,38px);font-weight:900;font-style:italic;line-height:1;letter-spacing:-1px;color:#E8E4DC">THE 4×4</div>
+    <div style="font-size:15px;color:#888;margin-top:12px;letter-spacing:.5px;line-height:1.7">4 тренировки · 4 недели · 8-недельная периодизация<br><span style="color:#C9A84C;font-weight:700">by Aram The1</span></div>
+  </div>
+  <div class="ws">
+    <div class="wr">
+      <div class="wl">День 1</div>
+      <div class="wb" onclick="show('a1',document.querySelectorAll('.t')[2],2)">
+        <div><div class="wn gold">A1 — Тренировка</div><div class="wf">Ноги (приоритет) · Плечи · Бицепс</div></div>
+        <div class="dot3"><div class="d on"></div><div class="d on"></div><div class="d on"></div></div>
+      </div>
+    </div>
+    <div class="wr">
+      <div class="wl">День 2</div>
+      <div class="wb" onclick="show('b1',document.querySelectorAll('.t')[3],3)">
+        <div><div class="wn gold">B1 — Тренировка</div><div class="wf">Спина (приоритет) · Грудь · Трицепс</div></div>
+        <div class="dot3"><div class="d on"></div><div class="d on"></div><div class="d on"></div></div>
+      </div>
+    </div>
+    <div class="wr">
+      <div class="wl">День 3</div>
+      <div class="wb dim"><div><div class="wn" style="color:#333">Активный отдых</div><div class="wf">Лёгкое кардио / ходьба / растяжка</div></div></div>
+    </div>
+    <div class="wr">
+      <div class="wl">День 4</div>
+      <div class="wb" onclick="show('a2',document.querySelectorAll('.t')[4],4)">
+        <div><div class="wn gold">A2 — Тренировка</div><div class="wf">Плечи (приоритет) · Ноги · Бицепс</div></div>
+        <div class="dot3"><div class="d on"></div><div class="d on"></div><div class="d on"></div></div>
+      </div>
+    </div>
+    <div class="wr">
+      <div class="wl">День 5</div>
+      <div class="wb" onclick="show('b2',document.querySelectorAll('.t')[5],5)">
+        <div><div class="wn gold">B2 — Тренировка</div><div class="wf">Грудь (приоритет) · Спина · Трицепс</div></div>
+        <div class="dot3"><div class="d on"></div><div class="d on"></div><div class="d on"></div></div>
+      </div>
+    </div>
+    <div class="wr">
+      <div class="wl">День 6</div>
+      <div class="wb dim"><div><div class="wn" style="color:#333">Активный отдых</div><div class="wf">Лёгкое кардио / ходьба / растяжка</div></div></div>
+    </div>
+    <div class="wr">
+      <div class="wl">День 7</div>
+      <div class="wb dim"><div><div class="wn" style="color:#252525">Восстановление</div><div class="wf">Подготовка к новому циклу</div></div></div>
+    </div>
+  </div>
+  <div style="padding:0 16px 32px">
+    <div class="ibox" style="text-align:center">
+      <div class="ibox-t">Периодизация</div>
+      <div class="ibox-b">Система рассчитана на <strong style="color:#AAA">8-недельный цикл</strong>.<br>Прогресс каждую неделю: <strong style="color:#AAA">+1–2 повторения или +3–5% веса</strong>.</div>
+    </div>
+    <div class="paywall" style="margin-top:12px">
+      <div class="paywall-txt"><strong>🔒 Видео обзоры заблокированы</strong>Получи полный доступ к видео библиотеке техники упражнений.</div>
+      <a href="#" class="paywall-btn">Получить доступ</a>
+    </div>
+  </div>
+</div>
+
+<!-- ПРАВИЛА -->
+<div id="ru" class="pg">
+  <div class="hero">
+    <div class="hero-glow"></div>
+    <div class="dn">IMPERIA THE1</div>
+    <div class="dt">Общие<br><span style="color:#C9A84C">Правила</span></div>
+  </div>
+  <div style="padding:16px;max-width:760px;margin:0 auto 32px">
+    <div class="rc">
+      <div class="rcard"><div class="rl">RIR — Базовые</div><div class="rv"><strong style="color:#C0BBB0">1–2 повторения в запасе</strong><br>Можешь сделать 12 — остановись на 10.</div></div>
+      <div class="rcard"><div class="rl">RIR — Изоляция</div><div class="rv"><strong style="color:#C0BBB0">До 0 RIR</strong><br>Работай до полного отказа.</div></div>
+      <div class="rcard"><div class="rl">Отдых между подходами</div><div class="rv"><strong style="color:#C0BBB0">1–2 минуты</strong><br>По ощущениям.</div></div>
+      <div class="rcard"><div class="rl">Отдых между упражнениями</div><div class="rv"><strong style="color:#C0BBB0">2–3 минуты</strong><br>По ощущениям.</div></div>
+      <div class="rcard"><div class="rl">Темп · Базовые</div><div class="rv"><strong style="color:#C0BBB0">Контролируемо</strong><br>Особенно негативная фаза.</div></div>
+      <div class="rcard"><div class="rl">Темп · Изоляция</div><div class="rv"><strong style="color:#C0BBB0">2 – 1 – 2</strong><br>Вниз · Пауза · Вверх.</div></div>
+      <div class="rcard"><div class="rl">Прогрессия</div><div class="rv"><strong style="color:#C0BBB0">Каждую неделю</strong><br>+1–2 повтора или +3–5% веса.</div></div>
+      <div class="rcard"><div class="rl">Разминка</div><div class="rv"><strong style="color:#C0BBB0">5–8 минут</strong><br>+ 2–3 разминочных подхода.</div></div>
+    </div>
+    <div class="ibox" style="margin-top:3px">
+      <div class="ibox-t">Что такое RIR?</div>
+      <div class="ibox-b"><strong style="color:#C0BBB0">Reps in Reserve</strong> — повторения в запасе.<br><br>RIR = 2 → ты сделал 10 повторений, но мог бы сделать 12.</div>
+    </div>
+    <div class="ibox" style="margin-top:3px">
+      <div class="ibox-t">Принцип</div>
+      <div class="ibox-b">У каждого дня есть приоритетная группа мышц, но <strong style="color:#C0BBB0">всё тело получает нагрузку</strong>. Антагонисты работают парами — одна мышца отдыхает пока работает противоположная.</div>
+    </div>
+  </div>
+</div>
+
+<!-- A1 -->
+<div id="a1" class="pg">
+  <div class="hero">
+    <div class="hero-glow"></div>
+    <div class="dn">День 1</div>
+    <div class="dt">Ноги<br><span style="color:#C9A84C">Приоритет</span></div>
+    <div class="badges"><span class="badge gold">Ноги (приоритет)</span><span class="badge">Плечи</span><span class="badge">Бицепс</span></div>
+  </div>
+  <div class="sec">
+    <div class="blk"><div class="bl">Блок 1 · Ноги + Плечи (антагонист)</div><div class="bline"></div></div>
+    <div class="ec">
+      <div class="eh"><div class="ei">1A</div><div class="em">
+        <div class="en">Приседания со штангой</div>
+        <div class="ps"><span class="p hi">4 × 6–9</span><span class="p hi">RIR 1–2</span><span class="p">Отдых 1–2 мин</span></div>
+        <div class="mchip"><div class="mdot"></div>Квадрицепс · Ягодицы</div>
+        <div class="done-wrap" onclick="tog(this)"><div class="done-box"><svg width="8" height="6" viewBox="0 0 8 6" fill="none"><path d="M1 3L3 5L7 1" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round"/></svg></div><span class="done-lbl">Выполнено</span></div>
+      </div></div>
+      <div class="ef">
+        <div class="en2"><div class="el">Техника</div><div class="et">Корпус напряжён, колени над носками, контроль глубины</div></div>
+        <div class="en2"><div class="el">Почему</div><div class="et">Максимальное механическое напряжение → главный драйвер роста</div></div>
+      </div>
+      <div class="card-actions">
+        <div><button class="timer-btn" onclick="startTimer(this,90)">⏱ Таймер · 90с</button><div class="timer-display"></div></div>
+        <a class="lock-btn" href="#" onclick="showPaywall(event)"><svg width="10" height="12" viewBox="0 0 10 12" fill="none"><rect x="1" y="5" width="8" height="7" rx="1" stroke="#444" stroke-width="1.2"/><path d="M3 5V3.5a2 2 0 0 1 4 0V5" stroke="#444" stroke-width="1.2"/></svg>Видео обзор</a>
+      </div>
+    </div>
+    <div class="ec">
+      <div class="eh"><div class="ei">1B</div><div class="em">
+        <div class="en">Жим гантелей сидя</div>
+        <div class="ps"><span class="p hi">3–4 × 11</span><span class="p hi">RIR 1–2</span><span class="p">Отдых 90 с</span></div>
+        <div class="mchip"><div class="mdot"></div>Передняя дельта · Боковая дельта</div>
+        <div class="done-wrap" onclick="tog(this)"><div class="done-box"><svg width="8" height="6" viewBox="0 0 8 6" fill="none"><path d="M1 3L3 5L7 1" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round"/></svg></div><span class="done-lbl">Выполнено</span></div>
+      </div></div>
+      <div class="ef">
+        <div class="en2"><div class="el">Техника</div><div class="et">Не прогибай поясницу, контролируй негативную фазу</div></div>
+        <div class="en2"><div class="el">Почему</div><div class="et">Антагонист к ногам → плотность без потери качества приседа</div></div>
+      </div>
+      <div class="card-actions">
+        <div><button class="timer-btn" onclick="startTimer(this,90)">⏱ Таймер · 90с</button><div class="timer-display"></div></div>
+        <a class="tg-btn" href="https://t.me/imperiathe1/77" target="_blank"><svg width="10" height="12" viewBox="0 0 24 24" fill="#C9A84C"><path d="M8 5v14l11-7z"/></svg>Видео обзор</a>
+      </div>
+    </div>
+    <div class="blk"><div class="bl">Блок 2 · Изоляция ног + Дельты</div><div class="bline"></div></div>
+    <div class="ec">
+      <div class="eh"><div class="ei">2A</div><div class="em">
+        <div class="en">Разгибания ног в тренажёре</div>
+        <div class="ps"><span class="p hi">3 × 11–14</span><span class="p hi">0–1 RIR</span><span class="p">Отдых ~1 мин</span></div>
+        <div class="mchip"><div class="mdot"></div>Квадрицепс</div>
+        <div class="done-wrap" onclick="tog(this)"><div class="done-box"><svg width="8" height="6" viewBox="0 0 8 6" fill="none"><path d="M1 3L3 5L7 1" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round"/></svg></div><span class="done-lbl">Выполнено</span></div>
+      </div></div>
+      <div class="ef">
+        <div class="en2"><div class="el">Техника</div><div class="et">1 секунда паузы в точке пикового сокращения</div></div>
+        <div class="en2"><div class="el">Почему</div><div class="et">Финишер для квадрицепса после базового</div></div>
+      </div>
+      <div class="card-actions">
+        <div><button class="timer-btn" onclick="startTimer(this,60)">⏱ Таймер · 60с</button><div class="timer-display"></div></div>
+        <a class="lock-btn" href="#" onclick="showPaywall(event)"><svg width="10" height="12" viewBox="0 0 10 12" fill="none"><rect x="1" y="5" width="8" height="7" rx="1" stroke="#444" stroke-width="1.2"/><path d="M3 5V3.5a2 2 0 0 1 4 0V5" stroke="#444" stroke-width="1.2"/></svg>Видео обзор</a>
+      </div>
+    </div>
+    <div class="ec">
+      <div class="eh"><div class="ei">2B</div><div class="em">
+        <div class="en">Разведения гантелей в стороны</div>
+        <div class="ps"><span class="p hi">3 × 11–14</span><span class="p">Отдых ~1 мин</span></div>
+        <div class="mchip"><div class="mdot"></div>Боковая дельта</div>
+        <div class="done-wrap" onclick="tog(this)"><div class="done-box"><svg width="8" height="6" viewBox="0 0 8 6" fill="none"><path d="M1 3L3 5L7 1" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round"/></svg></div><span class="done-lbl">Выполнено</span></div>
+      </div></div>
+      <div class="ef">
+        <div class="en2"><div class="el">Техника</div><div class="et">Веди локтями, не раскачивай корпус</div></div>
+        <div class="en2"><div class="el">Почему</div><div class="et">Баланс дельт (передняя уже нагружена жимом)</div></div>
+      </div>
+      <div class="card-actions">
+        <div><button class="timer-btn" onclick="startTimer(this,60)">⏱ Таймер · 60с</button><div class="timer-display"></div></div>
+        <a class="lock-btn" href="#" onclick="showPaywall(event)"><svg width="10" height="12" viewBox="0 0 10 12" fill="none"><rect x="1" y="5" width="8" height="7" rx="1" stroke="#444" stroke-width="1.2"/><path d="M3 5V3.5a2 2 0 0 1 4 0V5" stroke="#444" stroke-width="1.2"/></svg>Видео обзор</a>
+      </div>
+    </div>
+    <div class="blk"><div class="bl">Блок 3 · Бицепс бедра + Бицепс</div><div class="bline"></div></div>
+    <div class="ec">
+      <div class="eh"><div class="ei">3A</div><div class="em">
+        <div class="en">Сгибания ног лёжа</div>
+        <div class="ps"><span class="p hi">3 × 11–14</span><span class="p">Отдых ~1 мин</span></div>
+        <div class="mchip"><div class="mdot"></div>Бицепс бедра</div>
+        <div class="done-wrap" onclick="tog(this)"><div class="done-box"><svg width="8" height="6" viewBox="0 0 8 6" fill="none"><path d="M1 3L3 5L7 1" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round"/></svg></div><span class="done-lbl">Выполнено</span></div>
+      </div></div>
+      <div class="ef">
+        <div class="en2"><div class="el">Техника</div><div class="et">Таз прижат, без читинга</div></div>
+        <div class="en2"><div class="el">Почему</div><div class="et">Баланс квадрицепс ↔ бицепс бедра, защита колена</div></div>
+      </div>
+      <div class="card-actions">
+        <div><button class="timer-btn" onclick="startTimer(this,60)">⏱ Таймер · 60с</button><div class="timer-display"></div></div>
+        <a class="lock-btn" href="#" onclick="showPaywall(event)"><svg width="10" height="12" viewBox="0 0 10 12" fill="none"><rect x="1" y="5" width="8" height="7" rx="1" stroke="#444" stroke-width="1.2"/><path d="M3 5V3.5a2 2 0 0 1 4 0V5" stroke="#444" stroke-width="1.2"/></svg>Видео обзор</a>
+      </div>
+    </div>
+    <div class="ec">
+      <div class="eh"><div class="ei">3B</div><div class="em">
+        <div class="en">Подъём на бицепс — EZ гриф</div>
+        <div class="ps"><span class="p hi">3–4 × 8–11</span><span class="p">Отдых ~1 мин</span></div>
+        <div class="mchip"><div class="mdot"></div>Бицепс</div>
+        <div class="done-wrap" onclick="tog(this)"><div class="done-box"><svg width="8" height="6" viewBox="0 0 8 6" fill="none"><path d="M1 3L3 5L7 1" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round"/></svg></div><span class="done-lbl">Выполнено</span></div>
+      </div></div>
+      <div class="ef">
+        <div class="en2"><div class="el">Техника</div><div class="et">Локти зафиксированы, контроль на опускании</div></div>
+        <div class="en2"><div class="el">Почему</div><div class="et">Малые группы в конце — не мешают базовым</div></div>
+      </div>
+      <div class="card-actions">
+        <div><button class="timer-btn" onclick="startTimer(this,60)">⏱ Таймер · 60с</button><div class="timer-display"></div></div>
+        <a class="lock-btn" href="#" onclick="showPaywall(event)"><svg width="10" height="12" viewBox="0 0 10 12" fill="none"><rect x="1" y="5" width="8" height="7" rx="1" stroke="#444" stroke-width="1.2"/><path d="M3 5V3.5a2 2 0 0 1 4 0V5" stroke="#444" stroke-width="1.2"/></svg>Видео обзор</a>
+      </div>
+    </div>
+    <div class="fin">
+      <div class="ft">⚡ Финишер (опционально)</div>
+      <div class="fi"><span>Скручивания или Планка 2×макс</span><span class="fn">3×15–20</span></div>
+      <div class="fi"><span>Запрыгивания на тумбу</span><span class="fn">2–3×8</span></div>
+      <div class="fi"><span>Ротации плеч</span><span class="fn">2×15–20</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- B1 -->
+<div id="b1" class="pg">
+  <div class="hero">
+    <div class="hero-glow"></div>
+    <div class="dn">День 2</div>
+    <div class="dt">Спина<br><span style="color:#C9A84C">Приоритет</span></div>
+    <div class="badges"><span class="badge gold">Спина (приоритет)</span><span class="badge">Грудь</span><span class="badge">Трицепс</span></div>
+  </div>
+  <div class="sec">
+    <div class="blk"><div class="bl">Блок 1 · Спина + Грудь (антагонист)</div><div class="bline"></div></div>
+    <div class="ec">
+      <div class="eh"><div class="ei">1A</div><div class="em">
+        <div class="en">Подтягивания</div>
+        <div class="ps"><span class="p hi">4 × 11</span><span class="p hi">RIR 0</span><span class="p">Отдых 1–2 мин</span></div>
+        <div class="mchip"><div class="mdot"></div>Широчайшие · Верхняя спина</div>
+        <div style="font-size:10px;color:#333;font-style:italic;margin-top:5px">с весом / с резиной — по уровню</div>
+        <div class="done-wrap" onclick="tog(this)"><div class="done-box"><svg width="8" height="6" viewBox="0 0 8 6" fill="none"><path d="M1 3L3 5L7 1" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round"/></svg></div><span class="done-lbl">Выполнено</span></div>
+      </div></div>
+      <div class="ef">
+        <div class="en2"><div class="el">Почему</div><div class="et">Ширина + контроль + высокий нейральный выход</div></div>
+        <div class="en2"><div class="el">Паринг</div><div class="et">Антагонист к жиму → баланс и плотность тренировки</div></div>
+      </div>
+      <div class="card-actions">
+        <div><button class="timer-btn" onclick="startTimer(this,90)">⏱ Таймер · 90с</button><div class="timer-display"></div></div>
+        <a class="lock-btn" href="#" onclick="showPaywall(event)"><svg width="10" height="12" viewBox="0 0 10 12" fill="none"><rect x="1" y="5" width="8" height="7" rx="1" stroke="#444" stroke-width="1.2"/><path d="M3 5V3.5a2 2 0 0 1 4 0V5" stroke="#444" stroke-width="1.2"/></svg>Видео обзор</a>
+      </div>
+    </div>
+    <div class="ec">
+      <div class="eh"><div class="ei">1B</div><div class="em">
+        <div class="en">Жим штанги лёжа</div>
+        <div class="ps"><span class="p hi">4 × 6–10</span><span class="p">Отдых 2 мин</span></div>
+        <div class="mchip"><div class="mdot"></div>Грудь · Трицепс</div>
+        <div class="done-wrap" onclick="tog(this)"><div class="done-box"><svg width="8" height="6" viewBox="0 0 8 6" fill="none"><path d="M1 3L3 5L7 1" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round"/></svg></div><span class="done-lbl">Выполнено</span></div>
+      </div></div>
+      <div class="ef">
+        <div class="en2"><div class="el">Почему</div><div class="et">Тяга ↔ жим = баланс и плотность тренировки</div></div>
+        <div class="en2"><div class="el">Эффект</div><div class="et">Одна мышца отдыхает пока работает противоположная</div></div>
+      </div>
+      <div class="card-actions">
+        <div><button class="timer-btn" onclick="startTimer(this,120)">⏱ Таймер · 2 мин</button><div class="timer-display"></div></div>
+        <a class="lock-btn" href="#" onclick="showPaywall(event)"><svg width="10" height="12" viewBox="0 0 10 12" fill="none"><rect x="1" y="5" width="8" height="7" rx="1" stroke="#444" stroke-width="1.2"/><path d="M3 5V3.5a2 2 0 0 1 4 0V5" stroke="#444" stroke-width="1.2"/></svg>Видео обзор</a>
+      </div>
+    </div>
+    <div class="blk"><div class="bl">Блок 2 · Объём спины</div><div class="bline"></div></div>
+    <div class="ec">
+      <div class="eh"><div class="ei">2A</div><div class="em">
+        <div class="en">Тяга гантели в наклоне на скамье</div>
+        <div class="ps"><span class="p hi">3 × 8–11</span><span class="p">Отдых ~1 мин</span></div>
+        <div class="mchip"><div class="mdot"></div>Середина спины · Широчайшие</div>
+        <div class="done-wrap" onclick="tog(this)"><div class="done-box"><svg width="8" height="6" viewBox="0 0 8 6" fill="none"><path d="M1 3L3 5L7 1" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round"/></svg></div><span class="done-lbl">Выполнено</span></div>
+      </div></div>
+      <div class="ef">
+        <div class="en2"><div class="el">Техника</div><div class="et">Грудь на скамье, локти близко к корпусу</div></div>
+        <div class="en2"><div class="el">Почему</div><div class="et">Чистая нагрузка на середину спины</div></div>
+      </div>
+      <div class="card-actions">
+        <div><button class="timer-btn" onclick="startTimer(this,60)">⏱ Таймер · 60с</button><div class="timer-display"></div></div>
+        <a class="lock-btn" href="#" onclick="showPaywall(event)"><svg width="10" height="12" viewBox="0 0 10 12" fill="none"><rect x="1" y="5" width="8" height="7" rx="1" stroke="#444" stroke-width="1.2"/><path d="M3 5V3.5a2 2 0 0 1 4 0V5" stroke="#444" stroke-width="1.2"/></svg>Видео обзор</a>
+      </div>
+    </div>
+    <div class="blk"><div class="bl">Блок 3 · Грудь + Толщина спины</div><div class="bline"></div></div>
+    <div class="ec">
+      <div class="eh"><div class="ei">3A</div><div class="em">
+        <div class="en">Жим гантелей на наклонной скамье</div>
+        <div class="ps"><span class="p hi">3 × 8–11</span><span class="p">Отдых ~1 мин</span></div>
+        <div class="mchip"><div class="mdot"></div>Верхняя грудь</div>
+        <div class="done-wrap" onclick="tog(this)"><div class="done-box"><svg width="8" height="6" viewBox="0 0 8 6" fill="none"><path d="M1 3L3 5L7 1" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round"/></svg></div><span class="done-lbl">Выполнено</span></div>
+      </div></div>
+      <div class="ef">
+        <div class="en2"><div class="el">Почему</div><div class="et">Верхняя грудь + стабильность. Та же скамья — лёгкий переход</div></div>
+        <div class="en2"><div class="el">Угол</div><div class="et">Другой вектор нагрузки vs горизонтальный жим</div></div>
+      </div>
+      <div class="card-actions">
+        <div><button class="timer-btn" onclick="startTimer(this,60)">⏱ Таймер · 60с</button><div class="timer-display"></div></div>
+        <a class="lock-btn" href="#" onclick="showPaywall(event)"><svg width="10" height="12" viewBox="0 0 10 12" fill="none"><rect x="1" y="5" width="8" height="7" rx="1" stroke="#444" stroke-width="1.2"/><path d="M3 5V3.5a2 2 0 0 1 4 0V5" stroke="#444" stroke-width="1.2"/></svg>Видео обзор</a>
+      </div>
+    </div>
+    <div class="ec">
+      <div class="eh"><div class="ei">3B</div><div class="em">
+        <div class="en">Тяга блока узким хватом</div>
+        <div class="ps"><span class="p hi">3 × 8–11</span><span class="p">Отдых ~1 мин</span></div>
+        <div class="mchip"><div class="mdot"></div>Середина спины · Ромбовидные</div>
+        <div class="done-wrap" onclick="tog(this)"><div class="done-box"><svg width="8" height="6" viewBox="0 0 8 6" fill="none"><path d="M1 3L3 5L7 1" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round"/></svg></div><span class="done-lbl">Выполнено</span></div>
+      </div></div>
+      <div class="ef">
+        <div class="en2"><div class="el">Почему</div><div class="et">Толщина спины — дополнительный объём</div></div>
+        <div class="en2"><div class="el">Фокус</div><div class="et">Другой хват — другой стимул</div></div>
+      </div>
+      <div class="card-actions">
+        <div><button class="timer-btn" onclick="startTimer(this,60)">⏱ Таймер · 60с</button><div class="timer-display"></div></div>
+        <a class="lock-btn" href="#" onclick="showPaywall(event)"><svg width="10" height="12" viewBox="0 0 10 12" fill="none"><rect x="1" y="5" width="8" height="7" rx="1" stroke="#444" stroke-width="1.2"/><path d="M3 5V3.5a2 2 0 0 1 4 0V5" stroke="#444" stroke-width="1.2"/></svg>Видео обзор</a>
+      </div>
+    </div>
+    <div class="blk"><div class="bl">Блок 4 · Трицепс (финишер)</div><div class="bline"></div></div>
+    <div class="ec">
+      <div class="eh"><div class="ei">4</div><div class="em">
+        <div class="en">Французский жим стоя — нижний блок</div>
+        <div class="ps"><span class="p hi">4 × 11–14</span><span class="p">Отдых ~1 мин</span></div>
+        <div class="mchip"><div class="mdot"></div>Длинная головка трицепса</div>
+        <div class="done-wrap" onclick="tog(this)"><div class="done-box"><svg width="8" height="6" viewBox="0 0 8 6" fill="none"><path d="M1 3L3 5L7 1" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round"/></svg></div><span class="done-lbl">Выполнено</span></div>
+      </div></div>
+      <div class="ef">
+        <div class="en2"><div class="el">Почему</div><div class="et">Финальный финишер для трицепса</div></div>
+        <div class="en2"><div class="el">Положение</div><div class="et">Над головой — максимальное растяжение длинной головки</div></div>
+      </div>
+      <div class="card-actions">
+        <div><button class="timer-btn" onclick="startTimer(this,60)">⏱ Таймер · 60с</button><div class="timer-display"></div></div>
+        <a class="lock-btn" href="#" onclick="showPaywall(event)"><svg width="10" height="12" viewBox="0 0 10 12" fill="none"><rect x="1" y="5" width="8" height="7" rx="1" stroke="#444" stroke-width="1.2"/><path d="M3 5V3.5a2 2 0 0 1 4 0V5" stroke="#444" stroke-width="1.2"/></svg>Видео обзор</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- A2 -->
+<div id="a2" class="pg">
+  <div class="hero">
+    <div class="hero-glow"></div>
+    <div class="dn">День 4</div>
+    <div class="dt">Плечи<br><span style="color:#C9A84C">Приоритет</span></div>
+    <div class="badges"><span class="badge gold">Плечи (приоритет)</span><span class="badge">Ноги</span><span class="badge">Ягодицы</span><span class="badge">Бицепс</span></div>
+  </div>
+  <div class="sec">
+    <div class="blk"><div class="bl">Блок 1 · Ноги + Плечи (антагонист)</div><div class="bline"></div></div>
+    <div class="ec">
+      <div class="eh"><div class="ei">1A</div><div class="em">
+        <div class="en">Жим ногами в тренажёре</div>
+        <div class="ps"><span class="p hi">3 × 16</span><span class="p hi">RIR 0–1</span><span class="p">Отдых 1–2 мин</span></div>
+        <div class="mchip"><div class="mdot"></div>Квадрицепс · Ягодицы</div>
+        <div class="done-wrap" onclick="tog(this)"><div class="done-box"><svg width="8" height="6" viewBox="0 0 8 6" fill="none"><path d="M1 3L3 5L7 1" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round"/></svg></div><span class="done-lbl">Выполнено</span></div>
+      </div></div>
+      <div class="ef">
+        <div class="en2"><div class="el">Техника</div><div class="et">Полная амплитуда, контроль коленей</div></div>
+        <div class="en2"><div class="el">Почему</div><div class="et">Больше объёма при меньшей нагрузке на ЦНС</div></div>
+      </div>
+      <div class="card-actions">
+        <div><button class="timer-btn" onclick="startTimer(this,90)">⏱ Таймер · 90с</button><div class="timer-display"></div></div>
+        <a class="lock-btn" href="#" onclick="showPaywall(event)"><svg width="10" height="12" viewBox="0 0 10 12" fill="none"><rect x="1" y="5" width="8" height="7" rx="1" stroke="#444" stroke-width="1.2"/><path d="M3 5V3.5a2 2 0 0 1 4 0V5" stroke="#444" stroke-width="1.2"/></svg>Видео обзор</a>
+      </div>
+    </div>
+    <div class="ec">
+      <div class="eh"><div class="ei">1B</div><div class="em">
+        <div class="en">Жим в тренажёре на плечи</div>
+        <div class="ps"><span class="p hi">3 × 11</span><span class="p hi">RIR 1–2</span><span class="p">Отдых 1–2 мин</span></div>
+        <div class="mchip"><div class="mdot"></div>Передняя дельта · Боковая дельта</div>
+        <div class="done-wrap" onclick="tog(this)"><div class="done-box"><svg width="8" height="6" viewBox="0 0 8 6" fill="none"><path d="M1 3L3 5L7 1" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round"/></svg></div><span class="done-lbl">Выполнено</span></div>
+      </div></div>
+      <div class="ef">
+        <div class="en2"><div class="el">Почему</div><div class="et">Тренажёр устойчивее — позволяет сделать больше повторений</div></div>
+        <div class="en2"><div class="el">Эффект</div><div class="et">Стабильность и контроль → качественный объём</div></div>
+      </div>
+      <div class="card-actions">
+        <div><button class="timer-btn" onclick="startTimer(this,90)">⏱ Таймер · 90с</button><div class="timer-display"></div></div>
+        <a class="lock-btn" href="#" onclick="showPaywall(event)"><svg width="10" height="12" viewBox="0 0 10 12" fill="none"><rect x="1" y="5" width="8" height="7" rx="1" stroke="#444" stroke-width="1.2"/><path d="M3 5V3.5a2 2 0 0 1 4 0V5" stroke="#444" stroke-width="1.2"/></svg>Видео обзор</a>
+      </div>
+    </div>
+    <div class="blk"><div class="bl">Блок 2 · Объём ног + Кабельные дельты</div><div class="bline"></div></div>
+    <div class="ec">
+      <div class="eh"><div class="ei">2A</div><div class="em">
+        <div class="en">Выпады (статичные / ходьба)</div>
+        <div class="ps"><span class="p hi">2 × 20 / нога</span><span class="p">Отдых 2+ мин</span></div>
+        <div class="mchip"><div class="mdot"></div>Квадрицепс · Ягодицы · Баланс</div>
+        <div class="done-wrap" onclick="tog(this)"><div class="done-box"><svg width="8" height="6" viewBox="0 0 8 6" fill="none"><path d="M1 3L3 5L7 1" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round"/></svg></div><span class="done-lbl">Выполнено</span></div>
+      </div></div>
+      <div class="ef">
+        <div class="en2"><div class="el">Техника</div><div class="et">Достаточно широкий шаг, корпус стабилен</div></div>
+        <div class="en2"><div class="el">Почему</div><div class="et">Баланс, ягодицы, координация</div></div>
+      </div>
+      <div class="card-actions">
+        <div><button class="timer-btn" onclick="startTimer(this,120)">⏱ Таймер · 2 мин</button><div class="timer-display"></div></div>
+        <a class="lock-btn" href="#" onclick="showPaywall(event)"><svg width="10" height="12" viewBox="0 0 10 12" fill="none"><rect x="1" y="5" width="8" height="7" rx="1" stroke="#444" stroke-width="1.2"/><path d="M3 5V3.5a2 2 0 0 1 4 0V5" stroke="#444" stroke-width="1.2"/></svg>Видео обзор</a>
+      </div>
+    </div>
+    <div class="ec">
+      <div class="eh"><div class="ei">2B</div><div class="em">
+        <div class="en">Разведения и тяга к лицу на блоке</div>
+        <div class="ps"><span class="p hi">3 × 10/10 + 10/10</span><span class="p">Отдых ~1 мин</span></div>
+        <div class="mchip"><div class="mdot"></div>Боковая дельта · Задняя дельта</div>
+        <div class="done-wrap" onclick="tog(this)"><div class="done-box"><svg width="8" height="6" viewBox="0 0 8 6" fill="none"><path d="M1 3L3 5L7 1" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round"/></svg></div><span class="done-lbl">Выполнено</span></div>
+      </div></div>
+      <div class="ef">
+        <div class="en2"><div class="el">Почему</div><div class="et">Постоянное натяжение vs гантели</div></div>
+        <div class="en2"><div class="el">Польза</div><div class="et">Безопасная изоляция задней и боковой дельты</div></div>
+      </div>
+      <div class="card-actions">
+        <div><button class="timer-btn" onclick="startTimer(this,60)">⏱ Таймер · 60с</button><div class="timer-display"></div></div>
+        <a class="lock-btn" href="#" onclick="showPaywall(event)"><svg width="10" height="12" viewBox="0 0 10 12" fill="none"><rect x="1" y="5" width="8" height="7" rx="1" stroke="#444" stroke-width="1.2"/><path d="M3 5V3.5a2 2 0 0 1 4 0V5" stroke="#444" stroke-width="1.2"/></svg>Видео обзор</a>
+      </div>
+    </div>
+    <div class="blk"><div class="bl">Блок 3 · Ягодицы + Бицепс (финишер)</div><div class="bline"></div></div>
+    <div class="ec">
+      <div class="eh"><div class="ei">3A</div><div class="em">
+        <div class="en">Ягодичный мост / Тяга бедрами</div>
+        <div class="ps"><span class="p hi">3 × 11–14</span><span class="p">Отдых 2+ мин</span></div>
+        <div class="mchip"><div class="mdot"></div>Ягодицы</div>
+        <div class="done-wrap" onclick="tog(this)"><div class="done-box"><svg width="8" height="6" viewBox="0 0 8 6" fill="none"><path d="M1 3L3 5L7 1" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round"/></svg></div><span class="done-lbl">Выполнено</span></div>
+      </div></div>
+      <div class="ef">
+        <div class="en2"><div class="el">Техника</div><div class="et">1 сек пауза наверху, подбородок прижат</div></div>
+        <div class="en2"><div class="el">Почему</div><div class="et">Акцент на ягодицы (часто недогружены при приседе)</div></div>
+      </div>
+      <div class="card-actions">
+        <div><button class="timer-btn" onclick="startTimer(this,120)">⏱ Таймер · 2 мин</button><div class="timer-display"></div></div>
+        <a class="lock-btn" href="#" onclick="showPaywall(event)"><svg width="10" height="12" viewBox="0 0 10 12" fill="none"><rect x="1" y="5" width="8" height="7" rx="1" stroke="#444" stroke-width="1.2"/><path d="M3 5V3.5a2 2 0 0 1 4 0V5" stroke="#444" stroke-width="1.2"/></svg>Видео обзор</a>
+      </div>
+    </div>
+    <div class="ec">
+      <div class="eh"><div class="ei">3B</div><div class="em">
+        <div class="en">Подъём на бицепс с гантелями (дроп-сет)</div>
+        <div class="ps"><span class="p hi">5 × 16→9</span><span class="p">По ощущениям</span></div>
+        <div class="mchip"><div class="mdot"></div>Бицепс</div>
+        <div class="done-wrap" onclick="tog(this)"><div class="done-box"><svg width="8" height="6" viewBox="0 0 8 6" fill="none"><path d="M1 3L3 5L7 1" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round"/></svg></div><span class="done-lbl">Выполнено</span></div>
+      </div></div>
+      <div class="ef">
+        <div class="en2"><div class="el">Почему 5 подходов</div><div class="et">Единственное упражнение на бицепс — максимальный пампинг</div></div>
+        <div class="en2"><div class="el">Метод</div><div class="et">Увеличивай вес + уменьшай повторения каждый подход</div></div>
+      </div>
+      <div class="card-actions">
+        <div><button class="timer-btn" onclick="startTimer(this,60)">⏱ Таймер · 60с</button><div class="timer-display"></div></div>
+        <a class="lock-btn" href="#" onclick="showPaywall(event)"><svg width="10" height="12" viewBox="0 0 10 12" fill="none"><rect x="1" y="5" width="8" height="7" rx="1" stroke="#444" stroke-width="1.2"/><path d="M3 5V3.5a2 2 0 0 1 4 0V5" stroke="#444" stroke-width="1.2"/></svg>Видео обзор</a>
+      </div>
+    </div>
+    <div class="fin">
+      <div class="ft">⚡ Финишер (опционально)</div>
+      <div class="fi"><span>Скручивания или Планка 2×макс</span><span class="fn">3×15–20</span></div>
+      <div class="fi"><span>Запрыгивания на тумбу</span><span class="fn">2–3×8</span></div>
+      <div class="fi"><span>Ротации плеч</span><span class="fn">2×15–20</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- B2 -->
+<div id="b2" class="pg">
+  <div class="hero">
+    <div class="hero-glow"></div>
+    <div class="dn">День 5</div>
+    <div class="dt">Грудь<br><span style="color:#C9A84C">Приоритет</span></div>
+    <div class="badges"><span class="badge gold">Грудь (приоритет)</span><span class="badge">Спина</span><span class="badge">Трицепс</span></div>
+  </div>
+  <div class="sec">
+    <div class="blk"><div class="bl">Блок 1 · Грудь + Спина (антагонист)</div><div class="bline"></div></div>
+    <div class="ec">
+      <div class="eh"><div class="ei">1A</div><div class="em">
+        <div class="en">Жим в тренажёре горизонтально</div>
+        <div class="ps"><span class="p hi">4 × 9–11</span><span class="p">Отдых 1–2 мин</span></div>
+        <div class="mchip"><div class="mdot"></div>Грудь · Трицепс</div>
+        <div class="done-wrap" onclick="tog(this)"><div class="done-box"><svg width="8" height="6" viewBox="0 0 8 6" fill="none"><path d="M1 3L3 5L7 1" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round"/></svg></div><span class="done-lbl">Выполнено</span></div>
+      </div></div>
+      <div class="ef">
+        <div class="en2"><div class="el">Почему</div><div class="et">Тяга ↔ жим = баланс и плотность тренировки</div></div>
+        <div class="en2"><div class="el">Эффект</div><div class="et">Одна мышца отдыхает пока работает противоположная</div></div>
+      </div>
+      <div class="card-actions">
+        <div><button class="timer-btn" onclick="startTimer(this,90)">⏱ Таймер · 90с</button><div class="timer-display"></div></div>
+        <a class="lock-btn" href="#" onclick="showPaywall(event)"><svg width="10" height="12" viewBox="0 0 10 12" fill="none"><rect x="1" y="5" width="8" height="7" rx="1" stroke="#444" stroke-width="1.2"/><path d="M3 5V3.5a2 2 0 0 1 4 0V5" stroke="#444" stroke-width="1.2"/></svg>Видео обзор</a>
+      </div>
+    </div>
+    <div class="ec">
+      <div class="eh"><div class="ei">1B</div><div class="em">
+        <div class="en">Тяга верхнего блока</div>
+        <div class="ps"><span class="p hi">4 × 9–11</span><span class="p hi">RIR 1–2</span><span class="p">Отдых 2–3 мин</span></div>
+        <div class="mchip"><div class="mdot"></div>Широчайшие · Верхняя спина</div>
+        <div class="done-wrap" onclick="tog(this)"><div class="done-box"><svg width="8" height="6" viewBox="0 0 8 6" fill="none"><path d="M1 3L3 5L7 1" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round"/></svg></div><span class="done-lbl">Выполнено</span></div>
+      </div></div>
+      <div class="ef">
+        <div class="en2"><div class="el">Почему</div><div class="et">Ширина + контроль + высокий нейральный выход</div></div>
+        <div class="en2"><div class="el">Польза</div><div class="et">Отличный вариант для ощущения и сокращения спины</div></div>
+      </div>
+      <div class="card-actions">
+        <div><button class="timer-btn" onclick="startTimer(this,120)">⏱ Таймер · 2 мин</button><div class="timer-display"></div></div>
+        <a class="lock-btn" href="#" onclick="showPaywall(event)"><svg width="10" height="12" viewBox="0 0 10 12" fill="none"><rect x="1" y="5" width="8" height="7" rx="1" stroke="#444" stroke-width="1.2"/><path d="M3 5V3.5a2 2 0 0 1 4 0V5" stroke="#444" stroke-width="1.2"/></svg>Видео обзор</a>
+      </div>
+    </div>
+    <div class="blk"><div class="bl">Блок 2 · Угол груди + Толщина спины</div><div class="bline"></div></div>
+    <div class="ec">
+      <div class="eh"><div class="ei">2A</div><div class="em">
+        <div class="en">Жим гантелей узким хватом на наклонной</div>
+        <div class="ps"><span class="p hi">3 × 9–11</span><span class="p">Отдых 1–2 мин</span></div>
+        <div class="mchip"><div class="mdot"></div>Верхняя грудь · Трицепс</div>
+        <div class="done-wrap" onclick="tog(this)"><div class="done-box"><svg width="8" height="6" viewBox="0 0 8 6" fill="none"><path d="M1 3L3 5L7 1" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round"/></svg></div><span class="done-lbl">Выполнено</span></div>
+      </div></div>
+      <div class="ef">
+        <div class="en2"><div class="el">Почему</div><div class="et">Верхняя грудь + стабильность + другой угол</div></div>
+        <div class="en2"><div class="el">Отличие</div><div class="et">Свободный вес — другой характер нагрузки vs тренажёр</div></div>
+      </div>
+      <div class="card-actions">
+        <div><button class="timer-btn" onclick="startTimer(this,90)">⏱ Таймер · 90с</button><div class="timer-display"></div></div>
+        <a class="lock-btn" href="#" onclick="showPaywall(event)"><svg width="10" height="12" viewBox="0 0 10 12" fill="none"><rect x="1" y="5" width="8" height="7" rx="1" stroke="#444" stroke-width="1.2"/><path d="M3 5V3.5a2 2 0 0 1 4 0V5" stroke="#444" stroke-width="1.2"/></svg>Видео обзор</a>
+      </div>
+    </div>
+    <div class="ec">
+      <div class="eh"><div class="ei">2B</div><div class="em">
+        <div class="en">Тяга гантели в наклоне на скамье</div>
+        <div class="ps"><span class="p hi">4 × 9–11</span><span class="p">Отдых 1–2 мин</span></div>
+        <div class="mchip"><div class="mdot"></div>Середина спины</div>
+        <div class="done-wrap" onclick="tog(this)"><div class="done-box"><svg width="8" height="6" viewBox="0 0 8 6" fill="none"><path d="M1 3L3 5L7 1" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round"/></svg></div><span class="done-lbl">Выполнено</span></div>
+      </div></div>
+      <div class="ef">
+        <div class="en2"><div class="el">Техника</div><div class="et">Грудь на скамье, без читинга</div></div>
+        <div class="en2"><div class="el">Почему</div><div class="et">Чистая нагрузка на середину спины</div></div>
+      </div>
+      <div class="card-actions">
+        <div><button class="timer-btn" onclick="startTimer(this,60)">⏱ Таймер · 60с</button><div class="timer-display"></div></div>
+        <a class="lock-btn" href="#" onclick="showPaywall(event)"><svg width="10" height="12" viewBox="0 0 10 12" fill="none"><rect x="1" y="5" width="8" height="7" rx="1" stroke="#444" stroke-width="1.2"/><path d="M3 5V3.5a2 2 0 0 1 4 0V5" stroke="#444" stroke-width="1.2"/></svg>Видео обзор</a>
+      </div>
+    </div>
+    <div class="blk"><div class="bl">Блок 3 · Финишер груди + Трицепс</div><div class="bline"></div></div>
+    <div class="ec">
+      <div class="eh"><div class="ei">3A</div><div class="em">
+        <div class="en">Сведения в тренажёре (Pec Deck)</div>
+        <div class="ps"><span class="p hi">5 × 16→9</span><span class="p">Отдых 1–2 мин</span></div>
+        <div class="mchip"><div class="mdot"></div>Грудь (акцент на растяжение)</div>
+        <div class="done-wrap" onclick="tog(this)"><div class="done-box"><svg width="8" height="6" viewBox="0 0 8 6" fill="none"><path d="M1 3L3 5L7 1" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round"/></svg></div><span class="done-lbl">Выполнено</span></div>
+      </div></div>
+      <div class="ef">
+        <div class="en2"><div class="el">Почему 5 подходов</div><div class="et">Единственное упражнение с акцентом на растяжение груди</div></div>
+        <div class="en2"><div class="el">Метод</div><div class="et">Увеличивай вес + уменьшай повторения каждый подход</div></div>
+      </div>
+      <div class="card-actions">
+        <div><button class="timer-btn" onclick="startTimer(this,90)">⏱ Таймер · 90с</button><div class="timer-display"></div></div>
+        <a class="lock-btn" href="#" onclick="showPaywall(event)"><svg width="10" height="12" viewBox="0 0 10 12" fill="none"><rect x="1" y="5" width="8" height="7" rx="1" stroke="#444" stroke-width="1.2"/><path d="M3 5V3.5a2 2 0 0 1 4 0V5" stroke="#444" stroke-width="1.2"/></svg>Видео обзор</a>
+      </div>
+    </div>
+    <div class="ec">
+      <div class="eh"><div class="ei">3B</div><div class="em">
+        <div class="en">Разгибание одной рукой над головой на блоке</div>
+        <div class="ps"><span class="p hi">3 × 9–11</span><span class="p">Отдых 1–2 мин</span></div>
+        <div class="mchip"><div class="mdot"></div>Длинная головка трицепса</div>
+        <div class="done-wrap" onclick="tog(this)"><div class="done-box"><svg width="8" height="6" viewBox="0 0 8 6" fill="none"><path d="M1 3L3 5L7 1" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round"/></svg></div><span class="done-lbl">Выполнено</span></div>
+      </div></div>
+      <div class="ef">
+        <div class="en2"><div class="el">Почему</div><div class="et">Уже нагружен в жимах → финальный финишер</div></div>
+        <div class="en2"><div class="el">Угол</div><div class="et">Полностью отличается от предыдущих вариаций</div></div>
+      </div>
+      <div class="card-actions">
+        <div><button class="timer-btn" onclick="startTimer(this,60)">⏱ Таймер · 60с</button><div class="timer-display"></div></div>
+        <a class="lock-btn" href="#" onclick="showPaywall(event)"><svg width="10" height="12" viewBox="0 0 10 12" fill="none"><rect x="1" y="5" width="8" height="7" rx="1" stroke="#444" stroke-width="1.2"/><path d="M3 5V3.5a2 2 0 0 1 4 0V5" stroke="#444" stroke-width="1.2"/></svg>Видео обзор</a>
+      </div>
+    </div>
+    <div class="ibox" style="margin-top:20px;text-align:center">
+      <div class="ibox-t">Периодизация</div>
+      <div class="ibox-b">Система рассчитана на <strong style="color:#AAA">8-недельный цикл</strong>. Каждый цикл — новый уровень.</div>
+    </div>
+  </div>
+</div>
+
+<!-- PAYWALL MODAL -->
+<div id="modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:999;align-items:center;justify-content:center;padding:24px">
+  <div style="background:#111;border:1px solid rgba(201,168,76,.2);max-width:360px;width:100%;padding:32px 24px;text-align:center;position:relative">
+    <div style="position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,#C9A84C,transparent)"></div>
+    <div style="font-size:28px;margin-bottom:12px">🔒</div>
+    <div style="font-size:9px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#C9A84C;margin-bottom:8px">Только для подписчиков</div>
+    <div style="font-size:13px;color:#666;line-height:1.7;margin-bottom:24px">Видео обзоры техники доступны после оформления подписки на <strong style="color:#AAA">IMPERIA THE1</strong></div>
+    <a href="#" style="display:block;padding:14px;background:#C9A84C;color:#080808;font-size:9px;font-weight:800;letter-spacing:3px;text-transform:uppercase;text-decoration:none;margin-bottom:10px;transition:background .2s" onmouseover="this.style.background='#E8C86A'" onmouseout="this.style.background='#C9A84C'">Получить доступ</a>
+    <button onclick="closeModal()" style="background:none;border:none;color:#333;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:pointer;padding:8px">Закрыть</button>
+  </div>
+</div>
+
+<script>
+function show(id,el,idx){
+  document.querySelectorAll('.pg').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.t').forEach(t=>t.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+  el.classList.add('on');
+  document.getElementById('pbar').style.width=(idx/5*100)+'%';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function tog(wrap){
+  wrap.querySelector('.done-box').classList.toggle('checked');
+}
+const timers={};
+function startTimer(btn,secs){
+  const display=btn.nextElementSibling;
+  const key=btn.dataset.key||(btn.dataset.key=Math.random().toString(36).slice(2));
+  if(timers[key]){clearInterval(timers[key]);delete timers[key];btn.classList.remove('running');display.textContent='';return;}
+  let t=secs;
+  btn.classList.add('running');
+  display.textContent=fmt(t);
+  timers[key]=setInterval(()=>{
+    t--;
+    if(t<=0){clearInterval(timers[key]);delete timers[key];btn.classList.remove('running');display.textContent='✓ Готово';return;}
+    display.textContent=fmt(t);
+  },1000);
+}
+function fmt(s){return Math.floor(s/60)+':'+(s%60<10?'0':'')+s%60}
+function showPaywall(e){e.preventDefault();document.getElementById('modal').style.display='flex'}
+function closeModal(){document.getElementById('modal').style.display='none'}
+document.getElementById('modal').addEventListener('click',function(e){if(e.target===this)closeModal()})
+</script>
+</body>
+</html>
